@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("NetEti")]
 [assembly: AssemblyProduct("DemoParameterProvider")]
-[assembly: AssemblyCopyright("Copyright © Erik Nagel, NetEti 2015-2019")]
+[assembly: AssemblyCopyright("Copyright © Erik Nagel, NetEti 2015-2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
