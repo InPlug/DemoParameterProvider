@@ -26,14 +26,14 @@ namespace NetEti.ApplicationEnvironment
         /// <summary>
         /// Event, das ausgelöst wird, wenn die Parameter neu geladen wurden.
         /// </summary>
-        public event EventHandler ParametersReloaded;
+        public event EventHandler? ParametersReloaded;
 
         /// <summary>
         /// Liefert zu einem String-Parameter einen String-Wert.
         /// </summary>
         /// <param name="parameterName">Parameter-Name.</param>
         /// <returns>Parameter-Value.</returns>
-        public string ReadParameter(string parameterName)
+        public string? ReadParameter(string parameterName)
         {
             if (parameterName == "GesuchterParameter")
             {
@@ -62,17 +62,16 @@ namespace NetEti.ApplicationEnvironment
         /// <param name="parameters">Ein Objekt zur Parameterübergabe; dieser ParameterProvider
         /// erwartet einen String mit einem übergebenem Testwert plus optional
         /// einen Timer-Parameter für regelmäßige Reloads durch Pipe-Symbol '|' abgetrennt.</param>
-        public void Init(object parameters)
+        public void Init(object? parameters)
         {
             this._publisher = InfoController.GetInfoController();
-            this.EvaluateParameters(parameters.ToString());
+            this.EvaluateParameters(parameters?.ToString());
 
             this.ReloadApplicationParameters();
 
             if (this._eventTimer != null)
             {
                 this._lastTimerStart = DateTime.Now;
-                this._nextTimerStart = this._lastTimerStart.AddMilliseconds(this._timerInterval);
                 this._eventTimer.Start();
             }
         }
@@ -87,46 +86,43 @@ namespace NetEti.ApplicationEnvironment
             ParametersReloaded?.Invoke(this, new EventArgs());
         }
 
-        private string _initParameter;
-
         private void ReloadApplicationParameters()
         {
             try
             {
-                this._publisher.Publish("Lade aufwändige Parameter...");
+                this._publisher?.Publish("Lade aufwändige Parameter...");
                 Thread.Sleep(2000);
             }
             catch (Exception ex)
             {
-                this._publisher.Publish(this, ex.Message);
+                this._publisher?.Publish(this, ex.Message);
                 throw;
             }
             this.OnParametersReloaded();
         }
 
-        private IInfoPublisher _publisher;
-        private System.Timers.Timer _eventTimer;
+        private IInfoPublisher? _publisher;
+        private string? _initParameter;
+        private System.Timers.Timer? _eventTimer;
         private int _timerInterval;
-        private string _textPattern;
-        private Regex _compiledPattern;
+        private string? _textPattern;
+        private Regex? _compiledPattern;
         private DateTime _lastTimerStart;
-        private DateTime _nextTimerStart;
 
-        private void EvaluateParameters(string parameterUndTimer)
+        private void EvaluateParameters(string? parametersAndTimer)
         {
             this._initParameter = null;
             this._eventTimer = null;
             this._lastTimerStart = DateTime.MinValue;
-            this._nextTimerStart = DateTime.MinValue;
             this._textPattern = @"(?:MS|S|M|H|D):\d+";
             this._compiledPattern = new Regex(_textPattern);
 
-            if (String.IsNullOrEmpty(parameterUndTimer))
+            if (String.IsNullOrEmpty(parametersAndTimer))
             {
                 return;
             }
 
-            string[] para = (parameterUndTimer + "|").Split('|');
+            string[] para = (parametersAndTimer + "|").Split('|');
 
             MatchCollection alleTreffer;
             alleTreffer = _compiledPattern.Matches(para[para.Length - 2]);
@@ -156,7 +152,7 @@ namespace NetEti.ApplicationEnvironment
             this._initParameter = parameter;
         }
 
-        private void eventTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void eventTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             if (this._eventTimer != null)
             {
@@ -166,7 +162,6 @@ namespace NetEti.ApplicationEnvironment
             if (this._eventTimer != null)
             {
                 this._lastTimerStart = DateTime.Now;
-                this._nextTimerStart = this._lastTimerStart.AddMilliseconds(this._timerInterval);
                 this._eventTimer.Start();
             }
         }

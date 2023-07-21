@@ -1,6 +1,5 @@
-﻿using NetEti.ApplicationEnvironment;
-using NetEti.ApplicationControl;
-using System;
+﻿using NetEti.ApplicationControl;
+using NetEti.ApplicationEnvironment;
 
 namespace DemoParameterProviderDemo
 {
@@ -14,7 +13,7 @@ namespace DemoParameterProviderDemo
     /// 07.06.2015 Erik Nagel: erstellt
     /// 14.06.2019 Erik Nagel: überarbeitet.
     /// </remarks>
-    public class Program
+    internal class Program
     {
         /// <summary>
         /// Demonstriert die Benutzung von DemoParameterProvider.
@@ -25,25 +24,29 @@ namespace DemoParameterProviderDemo
             InfoController.GetInfoSource().RegisterInfoReceiver(
                 new ViewerAsWrapper(Program.HandleMessages), new[] { InfoType.Info });
 
-            Program._provider = new DemoParameterProvider();
             Program._provider.ParametersReloaded += Provider_ParametersReloaded;
             Program._provider.Init("Übergebener Parameter|M:1");
             Console.ReadLine();
         }
+        static Program()
+        {
+            Program._provider = new DemoParameterProvider();
+        }
 
         private static DemoParameterProvider _provider;
 
-        private static void Provider_ParametersReloaded(object sender, EventArgs e)
+        private static void Provider_ParametersReloaded(object? sender, EventArgs e)
         {
             // Die Parameter aus DemoParameterProvider:
             Console.WriteLine($"GesuchterParameter: {Program._provider.ReadParameter("GesuchterParameter")}");
             Console.WriteLine($"UebergebenerParameter: {Program._provider.ReadParameter("UebergebenerParameter")}");
         }
 
-        private static void HandleMessages(object sender, InfoArgs msgArgs)
+        private static void HandleMessages(object? sender, InfoArgs msgArgs)
         {
             Console.WriteLine(msgArgs.MessageObject.ToString());
         }
+
 
     }
 }
