@@ -39,7 +39,7 @@ namespace DemoParameterProviderDemo
         {
             // Die Parameter aus DemoParameterProvider:
             Console.WriteLine($"GesuchterParameter: {Program._provider.ReadParameter("GesuchterParameter")}");
-            Console.WriteLine($"UebergebenerParameter: {Program._provider.ReadParameter("UebergebenerParameter")}");
+            Console.WriteLine($"ÜbergebenerParameter: {Program._provider.ReadParameter("ÜbergebenerParameter")}");
         }
 
         private static void HandleMessages(object? sender, InfoArgs msgArgs)
